@@ -4,10 +4,14 @@ module.exports = function (io) {
   io.on("connection", async (socket) => {
     console.log("client is connected", socket.id);
 
-    socket.on("login", async (userName, cb) => {
+    socket.on("login", async (userData, cb) => {
       //유저정보 저장
       try {
-        const user = await userController.saveUser(userName, socket.id);
+        const user = await userController.saveUser(
+          userData.id,
+          userData.pwd,
+          socket.id
+        );
         cb({ ok: true, data: user });
       } catch (error) {
         cb({ ok: false, error: error.message });

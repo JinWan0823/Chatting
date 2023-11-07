@@ -6,6 +6,10 @@ const userSchema = new mongoose.Schema({
     required: [true, "User muse type name"],
     unique: true,
   },
+  pwd: {
+    type: String,
+    required: [true, "User use type pwd"],
+  },
   token: {
     type: String,
   },
