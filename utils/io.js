@@ -1,3 +1,4 @@
+const chatController = require("../Controllers/chatController");
 const userController = require("../Controllers/userController");
 
 module.exports = function (io) {
@@ -12,7 +13,25 @@ module.exports = function (io) {
           userData.pwd,
           socket.id
         );
+        const welcomeMessage = {
+          chat: `${user.name} is joined to this room`,
+          user: { id: null, name: "system" },
+        };
+        io.emit("message", welcomeMessage);
         cb({ ok: true, data: user });
+      } catch (error) {
+        cb({ ok: false, error: error.message });
+      }
+    });
+
+    socket.on("sendMessage", async (message, cb) => {
+      try {
+        const user = await userController.checkUser(socket.id);
+
+        //메세지 저장
+        const newMessage = await chatController.saveChat(message, user);
+        io.emit("message", newMessage);
+        cb({ ok: true });
       } catch (error) {
         cb({ ok: false, error: error.message });
       }

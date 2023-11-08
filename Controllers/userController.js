@@ -24,4 +24,10 @@ userController.saveUser = async (userName, password, sid) => {
   return user;
 };
 
+userController.checkUser = async (sid) => {
+  const user = await User.findOne({ token: sid });
+  if (!user) throw new Error("user not fount");
+  return user;
+};
+
 module.exports = userController;
